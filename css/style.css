@@ -121,7 +121,7 @@ Input{
 }
 
 #MovieDescription{
-    height: 140px;
+    height: 145px;
 }
 
 #MovieDescription-input{
@@ -132,13 +132,17 @@ Input{
 #Plus{
     height: 54px;
     width: 54px;
+    /* background-image:url(../images/Icon-CirclePencil.png); */
     background-image:url(../images/Icon-plus.svg);
     background-repeat: no-repeat;
     justify-self: center;
     position: absolute;
+    margin-bottom: -27px;
 }
 
-
+#Plus:hover{
+    cursor: pointer;
+}
 
 /* label{
     color: white;
@@ -146,14 +150,48 @@ Input{
     font-size: ;
 } */
 
-
-
-
 #Table-section{
     width: 362px;
     height: 378px;
     background-color: #17193299;
     margin-top: 150px;
     margin-right: 50px;
+    border-radius: 10px;
+}
+
+table{
+    width: 100%;
+    border-color: #FFFFFF;
+    border-collapse: collapse;
+}
+
+tbody{
+    width: 100%;
+}
+
+tr{
+    width: 100%;
+    height: 60px;
+}
+
+td{
+    border-bottom:1px solid white;
+}
+
+tr > td:first-child{
+    color: white;
+    font-family: 'Roboto';
+    font-weight: 400;
+    font-size: 16px;
+    width: 85%;
+}
+
+tr img{
+    height: 18px;
+    width: 18px;
+}
+
+tr img:hover{
+    cursor: pointer;
 }
 
