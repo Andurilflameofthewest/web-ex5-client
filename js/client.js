@@ -1,5 +1,19 @@
-window.onload = () => {
+window.onload = async () => {
     fetchMovies();
+    changeImg();
+}
+
+async function changeImg() {
+    while (true) {
+        const url = await fetch("https://picsum.photos/350/350",{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        document.getElementById("ChangingImage").style.backgroundImage = `url(${url.url})`;
+        await new Promise(r => setTimeout(r, 10000));
+    }
 }
 
 async function fetchMovies() {
@@ -11,7 +25,6 @@ async function fetchMovies() {
             }
         }).then(resp => resp.json());
 
-        console.log(tableData);
         let tableLength = await tableData.length;
         const tableBody = document.getElementsByTagName('table')[0].getElementsByTagName('tbody')[0];
 
@@ -26,8 +39,6 @@ async function fetchMovies() {
             name.innerHTML = movie.name;
             director.innerHTML = movie.director;
             year.innerHTML = movie.year;
-
-
 
             const edit = document.createElement('td');
             const editImg = document.createElement('img');
@@ -47,12 +58,11 @@ async function fetchMovies() {
             tableRow.appendChild(director);
             tableRow.appendChild(year);
 
-            // editImg.onclick = (() => handleDuplicate(tableRow, sim.model_id, userID));
+            editImg.onclick =() => {getMovie(movie.id)};
+            // editImg.addEventListener('click',() => {getMovie(movie.id)});
             tableRow.appendChild(edit);
 
             // trashImg.onclick = (() => handleTrash(tableRow, sim.model_id, userID));
-            
-
             tableRow.appendChild(trash);
             tableBody.appendChild(tableRow);
 
@@ -61,6 +71,113 @@ async function fetchMovies() {
 }
 
 async function getMovie(movie_id){
+    try {
+        const movie = await fetch(`https://web-ex5-server.onrender.com/api/movie/${movie_id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(resp => resp.json());
+
+        document.getElementById("MovieName-input").value = movie.name;
+        document.getElementById("MovieDirectorName-input").value = movie.director;
+        document.getElementById("MovieReleaseYear-input").value = movie.year;
+        document.getElementById("MovieDescription-input").value = movie.description;
+        document.getElementById("Plus").style.backgroundImage = "url(../images/Icon-CirclePencil.png)";
+        // document.getElementById("Plus").removeEventListener('click' ,addMovie);
+        document.getElementById("Plus").onclick = () => {updateMovie(movie_id)};
+        // document.getElementById("Plus").addEventListener('click',() => {updateMovie(movie_id, movie.name, movie.director, movie.year, movie.description)});
+    }
+    catch (err) { return; }
+
+}
+
+async function updateMovie(movie_id) {
+    try {
+        const input_name = document.getElementById("MovieName-input").value;
+        const input_director = document.getElementById("MovieDirectorName-input").value;
+        const input_year = document.getElementById("MovieReleaseYear-input").value;
+        const input_desc = document.getElementById("MovieDescription-input").value;
+        console.log(input_name,input_director,input_year,input_desc);
+        const movie = await fetch("https://web-ex5-server.onrender.com/api/movie/update", {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({id: movie_id, name: input_name, director: input_director, year: input_year, description: input_desc})
+        });
+        
+        document.getElementById("MovieName-input").value = "";
+        document.getElementById("MovieDirectorName-input").value ="";
+        document.getElementById("MovieReleaseYear-input").value ="";
+        document.getElementById("MovieDescription-input").value = "";
+        document.getElementById("Plus").style.backgroundImage = "url(../images/Icon-plus.svg)";
+        // document.getElementById("Plus").removeEventListener('click' ,updateMovie);
+        // document.getElementById("Plus").addEventListener('click', addMovie());
+        document.getElementById("Plus").onclick = () => {addMovie()};
+    }
+    catch (err) { console.log(err); return; }
+}
+
+async function addMovie() {
+    try {
+        const input_name = document.getElementById("MovieName-input").value;
+        const input_director = document.getElementById("MovieDirectorName-input").value;
+        const input_year = document.getElementById("MovieReleaseYear-input").value;
+        const input_desc = document.getElementById("MovieDescription-input").value;
+        console.log(input_name,input_director,input_year,input_desc);
+        const movie = await fetch("https://web-ex5-server.onrender.com/api/movie/update", {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({name: input_name, director: input_director, year: input_year, description: input_desc})
+        });
+        document.getElementById("MovieName-input").value = "";
+        document.getElementById("MovieDirectorName-input").value ="";
+        document.getElementById("MovieReleaseYear-input").value ="";
+        document.getElementById("MovieDescription-input").value = "";
+
+
+        // const movieID = document.createElement('td');
+        // const name = document.createElement('td');
+        //     const director = document.createElement('td');
+        //     const year = document.createElement('td');
+
+        //     const movie = tableData[i];
+        //     movieID.innerHTML = movie.id;
+        //     name.innerHTML = movie.name;
+        //     director.innerHTML = movie.director;
+        //     year.innerHTML = movie.year;
+
+        //     const edit = document.createElement('td');
+        //     const editImg = document.createElement('img');
+        //     editImg.src = 'images/Icon-Pencil.svg';
+        //     editImg.alt = 'Edit Icon';
+        //     edit.appendChild(editImg);
+
+        //     const trash = document.createElement('td');
+        //     const trashImg = document.createElement('img');
+        //     trashImg.src = 'images/Icon-delete.svg';
+        //     trashImg.alt = 'Delete Icon';
+        //     trash.appendChild(trashImg);
+
+        //     const tableRow = document.createElement('tr');
+        //     tableRow.appendChild(movieID);
+        //     tableRow.appendChild(name);
+        //     tableRow.appendChild(director);
+        //     tableRow.appendChild(year);
+
+        //     editImg.onclick =() => {getMovie(movie.id)};
+        //     // editImg.addEventListener('click',() => {getMovie(movie.id)});
+        //     tableRow.appendChild(edit);
+
+        //     // trashImg.onclick = (() => handleTrash(tableRow, sim.model_id, userID));
+        //     tableRow.appendChild(trash);
+        //     tableBody.appendChild(tableRow);
+    }
+
+    catch (err) { console.log(err); return; }
     
 }
 
