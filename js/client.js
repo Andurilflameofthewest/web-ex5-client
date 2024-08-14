@@ -6,7 +6,7 @@ window.onload = async () => {
 
 async function changeImg() {
     while (true) {
-        const url = await fetch("https://picsum.photos/350/350",{
+        const url = await fetch("https://picsum.photos/250/327",{
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -157,9 +157,12 @@ async function addMovie() {
         director.innerHTML = input_director;
         year.innerHTML = input_year;
 
-        name.setAttribute("id",`name${movie.id}`);
-        director.setAttribute("id",`director${movie.id}`);
-        year.setAttribute("id",`year${movie.id}`);
+        let lastRow = document.getElementsByTagName('tr')[document.getElementsByTagName('tr').length - 1];
+        const newID = parseInt(lastRow.id.slice(3,5)) + 1;
+
+        name.setAttribute("id",`name${newID}`);
+        director.setAttribute("id",`director${newID}`);
+        year.setAttribute("id",`year${newID}`);
 
         const edit = document.createElement('td');
         const editImg = document.createElement('img');
@@ -174,18 +177,17 @@ async function addMovie() {
         trash.appendChild(trashImg);
 
         const tableRow = document.createElement('tr');
-        tableRow.setAttribute("id",`row${movie.id}`);
+        tableRow.setAttribute("id",`row${newID}`);
         tableRow.appendChild(name);
         tableRow.appendChild(director);
         tableRow.appendChild(year);
 
-        editImg.onclick =() => {getMovie(movie.id)};
-        trashImg.onclick =() => {deleteMovie(movie.id)};
+        editImg.onclick =() => {getMovie(newID)};
+        trashImg.onclick =() => {deleteMovie(newID)};
         tableRow.appendChild(edit);
         tableRow.appendChild(trash);
         tableBody.appendChild(tableRow);
     }
-
     catch (err) { console.log(err); return; }
     
 }
@@ -198,7 +200,6 @@ async function deleteMovie(movie_id){
                 'Content-Type': 'application/json'
             }
         });
-
         document.getElementById("row"+movie_id).remove();
     }
     catch (err) { return; }
