@@ -30,19 +30,17 @@ async function fetchMovies() {
         const tableBody = document.getElementsByTagName('table')[0].getElementsByTagName('tbody')[0];
 
         for (let i = 0; i < tableLength; i++) {
-            // const movieID = document.createElement('td');
+
             const name = document.createElement('td');
             const director = document.createElement('td');
             const year = document.createElement('td');
-            
 
             const movie = tableData[i];
-            // movieID.innerHTML = movie.id;
+
             name.innerHTML = movie.name;
             director.innerHTML = movie.director;
             year.innerHTML = movie.year;
 
-            // movieID.setAttribute("id",`ID${movie.id}`);
             name.setAttribute("id",`name${movie.id}`);
             director.setAttribute("id",`director${movie.id}`);
             year.setAttribute("id",`year${movie.id}`);
@@ -62,7 +60,6 @@ async function fetchMovies() {
 
             const tableRow = document.createElement('tr');
             tableRow.setAttribute("id",`row${movie.id}`);
-            // tableRow.appendChild(movieID);
             tableRow.appendChild(name);
             tableRow.appendChild(director);
             tableRow.appendChild(year);
@@ -104,6 +101,9 @@ async function updateMovie(movie_id) {
         const input_director = document.getElementById("MovieDirectorName-input").value;
         const input_year = document.getElementById("MovieReleaseYear-input").value;
         const input_desc = document.getElementById("MovieDescription-input").value;
+        if (!input_name || !input_director || !input_year || !input_desc) {
+            return;
+        }
 
         const movie = await fetch("https://web-ex5-server.onrender.com/api/movie/update", {
             method: 'PUT',
@@ -134,6 +134,9 @@ async function addMovie() {
         const input_director = document.getElementById("MovieDirectorName-input").value;
         const input_year = document.getElementById("MovieReleaseYear-input").value;
         const input_desc = document.getElementById("MovieDescription-input").value;
+        if (!input_name || !input_director || !input_year || !input_desc) {
+            return;
+        }
 
         const movie = await fetch("https://web-ex5-server.onrender.com/api/movie/new", {
             method: 'POST',
@@ -141,7 +144,8 @@ async function addMovie() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({name: input_name, director: input_director, year: input_year, description: input_desc})
-        });
+        }).then(resp => resp.json());
+
         document.getElementById("MovieName-input").value = "";
         document.getElementById("MovieDirectorName-input").value ="";
         document.getElementById("MovieReleaseYear-input").value ="";
@@ -157,12 +161,9 @@ async function addMovie() {
         director.innerHTML = input_director;
         year.innerHTML = input_year;
 
-        let lastRow = document.getElementsByTagName('tr')[document.getElementsByTagName('tr').length - 1];
-        const newID = parseInt(lastRow.id.slice(3,5)) + 1;
-
-        name.setAttribute("id",`name${newID}`);
-        director.setAttribute("id",`director${newID}`);
-        year.setAttribute("id",`year${newID}`);
+        name.setAttribute("id",`name${movie.id}`);
+        director.setAttribute("id",`director${movie.id}`);
+        year.setAttribute("id",`year${movie.id}`);
 
         const edit = document.createElement('td');
         const editImg = document.createElement('img');
@@ -177,19 +178,18 @@ async function addMovie() {
         trash.appendChild(trashImg);
 
         const tableRow = document.createElement('tr');
-        tableRow.setAttribute("id",`row${newID}`);
+        tableRow.setAttribute("id",`row${movie.id}`);
         tableRow.appendChild(name);
         tableRow.appendChild(director);
         tableRow.appendChild(year);
 
-        editImg.onclick =() => {getMovie(newID)};
-        trashImg.onclick =() => {deleteMovie(newID)};
+        editImg.onclick =() => {getMovie(movie.id)};
+        trashImg.onclick =() => {deleteMovie(movie.id)};
         tableRow.appendChild(edit);
         tableRow.appendChild(trash);
         tableBody.appendChild(tableRow);
     }
     catch (err) { console.log(err); return; }
-    
 }
 
 async function deleteMovie(movie_id){
@@ -201,6 +201,11 @@ async function deleteMovie(movie_id){
             }
         });
         document.getElementById("row"+movie_id).remove();
+        document.getElementById("MovieName-input").value = "";
+        document.getElementById("MovieDirectorName-input").value ="";
+        document.getElementById("MovieReleaseYear-input").value ="";
+        document.getElementById("MovieDescription-input").value = "";
+        document.getElementById("Plus").style.backgroundImage = "url(../images/Icon-plus.svg)";
     }
     catch (err) { return; }
 }
