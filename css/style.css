@@ -176,14 +176,14 @@ tr{
 
 td{
     border-bottom:1px solid white;
-}
-
-tr > td:first-child{
     color: white;
     font-family: 'Roboto';
     font-weight: 400;
     font-size: 16px;
-    width: 85%;
+}
+
+tr > td:first-child{
+    width: 5%;
 }
 
 tr img{
