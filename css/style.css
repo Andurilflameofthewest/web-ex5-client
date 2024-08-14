@@ -157,13 +157,16 @@ Input{
     background-color: #17193299;
     margin-top: 150px;
     margin-right: 50px;
-    border-radius: 10px;
+    /* border-radius: 10px; */
+    overflow-y:auto;
 }
+
 
 table{
     width: 100%;
     border-color: #FFFFFF;
     border-collapse: collapse;
+    border-spacing: 10px 5px;
 }
 
 tbody{
@@ -180,11 +183,7 @@ td{
     color: white;
     font-family: 'Roboto';
     font-weight: 400;
-    font-size: 16px;
-}
-
-tr > td:first-child{
-    width: 5%;
+    font-size: 13px;
 }
 
 tr img{

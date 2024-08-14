@@ -1,6 +1,7 @@
 window.onload = async () => {
     fetchMovies();
     changeImg();
+    document.getElementById("Plus").onclick = () => {addMovie()};
 }
 
 async function changeImg() {
@@ -29,16 +30,23 @@ async function fetchMovies() {
         const tableBody = document.getElementsByTagName('table')[0].getElementsByTagName('tbody')[0];
 
         for (let i = 0; i < tableLength; i++) {
-            const movieID = document.createElement('td');
+            // const movieID = document.createElement('td');
             const name = document.createElement('td');
             const director = document.createElement('td');
             const year = document.createElement('td');
+            
 
             const movie = tableData[i];
-            movieID.innerHTML = movie.id;
+            // movieID.innerHTML = movie.id;
             name.innerHTML = movie.name;
             director.innerHTML = movie.director;
             year.innerHTML = movie.year;
+
+            // movieID.setAttribute("id",`ID${movie.id}`);
+            name.setAttribute("id",`name${movie.id}`);
+            director.setAttribute("id",`director${movie.id}`);
+            year.setAttribute("id",`year${movie.id}`);
+
 
             const edit = document.createElement('td');
             const editImg = document.createElement('img');
@@ -53,13 +61,12 @@ async function fetchMovies() {
             trash.appendChild(trashImg);
 
             const tableRow = document.createElement('tr');
-            tableRow.appendChild(movieID);
+            // tableRow.appendChild(movieID);
             tableRow.appendChild(name);
             tableRow.appendChild(director);
             tableRow.appendChild(year);
 
             editImg.onclick =() => {getMovie(movie.id)};
-            // editImg.addEventListener('click',() => {getMovie(movie.id)});
             tableRow.appendChild(edit);
 
             // trashImg.onclick = (() => handleTrash(tableRow, sim.model_id, userID));
@@ -84,9 +91,7 @@ async function getMovie(movie_id){
         document.getElementById("MovieReleaseYear-input").value = movie.year;
         document.getElementById("MovieDescription-input").value = movie.description;
         document.getElementById("Plus").style.backgroundImage = "url(../images/Icon-CirclePencil.png)";
-        // document.getElementById("Plus").removeEventListener('click' ,addMovie);
         document.getElementById("Plus").onclick = () => {updateMovie(movie_id)};
-        // document.getElementById("Plus").addEventListener('click',() => {updateMovie(movie_id, movie.name, movie.director, movie.year, movie.description)});
     }
     catch (err) { return; }
 
@@ -98,7 +103,7 @@ async function updateMovie(movie_id) {
         const input_director = document.getElementById("MovieDirectorName-input").value;
         const input_year = document.getElementById("MovieReleaseYear-input").value;
         const input_desc = document.getElementById("MovieDescription-input").value;
-        console.log(input_name,input_director,input_year,input_desc);
+
         const movie = await fetch("https://web-ex5-server.onrender.com/api/movie/update", {
             method: 'PUT',
             headers: {
@@ -112,8 +117,11 @@ async function updateMovie(movie_id) {
         document.getElementById("MovieReleaseYear-input").value ="";
         document.getElementById("MovieDescription-input").value = "";
         document.getElementById("Plus").style.backgroundImage = "url(../images/Icon-plus.svg)";
-        // document.getElementById("Plus").removeEventListener('click' ,updateMovie);
-        // document.getElementById("Plus").addEventListener('click', addMovie());
+
+        document.getElementById("name"+movie_id).innerHTML = input_name;
+        document.getElementById("director"+movie_id).innerHTML = input_director;
+        document.getElementById("year"+movie_id).innerHTML = input_year;
+
         document.getElementById("Plus").onclick = () => {addMovie()};
     }
     catch (err) { console.log(err); return; }
@@ -125,9 +133,9 @@ async function addMovie() {
         const input_director = document.getElementById("MovieDirectorName-input").value;
         const input_year = document.getElementById("MovieReleaseYear-input").value;
         const input_desc = document.getElementById("MovieDescription-input").value;
-        console.log(input_name,input_director,input_year,input_desc);
-        const movie = await fetch("https://web-ex5-server.onrender.com/api/movie/update", {
-            method: 'PUT',
+
+        const movie = await fetch("https://web-ex5-server.onrender.com/api/movie/new", {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -138,43 +146,44 @@ async function addMovie() {
         document.getElementById("MovieReleaseYear-input").value ="";
         document.getElementById("MovieDescription-input").value = "";
 
+        const tableBody = document.getElementsByTagName('table')[0].getElementsByTagName('tbody')[0];
 
-        // const movieID = document.createElement('td');
-        // const name = document.createElement('td');
-        //     const director = document.createElement('td');
-        //     const year = document.createElement('td');
+        const name = document.createElement('td');
+        const director = document.createElement('td');
+        const year = document.createElement('td');
 
-        //     const movie = tableData[i];
-        //     movieID.innerHTML = movie.id;
-        //     name.innerHTML = movie.name;
-        //     director.innerHTML = movie.director;
-        //     year.innerHTML = movie.year;
+        name.innerHTML = input_name;
+        director.innerHTML = input_director;
+        year.innerHTML = input_year;
 
-        //     const edit = document.createElement('td');
-        //     const editImg = document.createElement('img');
-        //     editImg.src = 'images/Icon-Pencil.svg';
-        //     editImg.alt = 'Edit Icon';
-        //     edit.appendChild(editImg);
+        name.setAttribute("id",`name${movie.id}`);
+        director.setAttribute("id",`director${movie.id}`);
+        year.setAttribute("id",`year${movie.id}`);
 
-        //     const trash = document.createElement('td');
-        //     const trashImg = document.createElement('img');
-        //     trashImg.src = 'images/Icon-delete.svg';
-        //     trashImg.alt = 'Delete Icon';
-        //     trash.appendChild(trashImg);
+        const edit = document.createElement('td');
+        const editImg = document.createElement('img');
+        editImg.src = 'images/Icon-Pencil.svg';
+        editImg.alt = 'Edit Icon';
+        edit.appendChild(editImg);
 
-        //     const tableRow = document.createElement('tr');
-        //     tableRow.appendChild(movieID);
-        //     tableRow.appendChild(name);
-        //     tableRow.appendChild(director);
-        //     tableRow.appendChild(year);
+        const trash = document.createElement('td');
+        const trashImg = document.createElement('img');
+        trashImg.src = 'images/Icon-delete.svg';
+        trashImg.alt = 'Delete Icon';
+        trash.appendChild(trashImg);
 
-        //     editImg.onclick =() => {getMovie(movie.id)};
-        //     // editImg.addEventListener('click',() => {getMovie(movie.id)});
-        //     tableRow.appendChild(edit);
+        const tableRow = document.createElement('tr');
+        tableRow.appendChild(name);
+        tableRow.appendChild(director);
+        tableRow.appendChild(year);
 
-        //     // trashImg.onclick = (() => handleTrash(tableRow, sim.model_id, userID));
-        //     tableRow.appendChild(trash);
-        //     tableBody.appendChild(tableRow);
+        editImg.onclick =() => {getMovie(movie.id)};
+            // editImg.addEventListener('click',() => {getMovie(movie.id)});
+        tableRow.appendChild(edit);
+
+            // trashImg.onclick = (() => handleTrash(tableRow, sim.model_id, userID));
+        tableRow.appendChild(trash);
+        tableBody.appendChild(tableRow);
     }
 
     catch (err) { console.log(err); return; }
