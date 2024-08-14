@@ -61,6 +61,7 @@ async function fetchMovies() {
             trash.appendChild(trashImg);
 
             const tableRow = document.createElement('tr');
+            tableRow.setAttribute("id",`row${movie.id}`);
             // tableRow.appendChild(movieID);
             tableRow.appendChild(name);
             tableRow.appendChild(director);
@@ -69,7 +70,7 @@ async function fetchMovies() {
             editImg.onclick =() => {getMovie(movie.id)};
             tableRow.appendChild(edit);
 
-            // trashImg.onclick = (() => handleTrash(tableRow, sim.model_id, userID));
+            trashImg.onclick =() => {deleteMovie(movie.id)};
             tableRow.appendChild(trash);
             tableBody.appendChild(tableRow);
 
@@ -173,15 +174,14 @@ async function addMovie() {
         trash.appendChild(trashImg);
 
         const tableRow = document.createElement('tr');
+        tableRow.setAttribute("id",`row${movie.id}`);
         tableRow.appendChild(name);
         tableRow.appendChild(director);
         tableRow.appendChild(year);
 
         editImg.onclick =() => {getMovie(movie.id)};
-            // editImg.addEventListener('click',() => {getMovie(movie.id)});
+        trashImg.onclick =() => {deleteMovie(movie.id)};
         tableRow.appendChild(edit);
-
-            // trashImg.onclick = (() => handleTrash(tableRow, sim.model_id, userID));
         tableRow.appendChild(trash);
         tableBody.appendChild(tableRow);
     }
@@ -190,6 +190,16 @@ async function addMovie() {
     
 }
 
-async function deleteMovie(){
+async function deleteMovie(movie_id){
+    try {
+        const movie = await fetch(`https://web-ex5-server.onrender.com/api/movie/${movie_id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
+        document.getElementById("row"+movie_id).remove();
+    }
+    catch (err) { return; }
 }
