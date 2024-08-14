@@ -88,7 +88,7 @@ async function getMovie(movie_id){
         document.getElementById("MovieDirectorName-input").value = movie.director;
         document.getElementById("MovieReleaseYear-input").value = movie.year;
         document.getElementById("MovieDescription-input").value = movie.description;
-        document.getElementById("Plus").style.backgroundImage = "url(../images/Icon-CirclePencil.png)";
+        document.getElementById("Plus").style.backgroundImage = "url(./images/Icon-CirclePencil.png)";
         document.getElementById("Plus").onclick = () => {updateMovie(movie_id)};
     }
     catch (err) { return; }
@@ -117,7 +117,7 @@ async function updateMovie(movie_id) {
         document.getElementById("MovieDirectorName-input").value ="";
         document.getElementById("MovieReleaseYear-input").value ="";
         document.getElementById("MovieDescription-input").value = "";
-        document.getElementById("Plus").style.backgroundImage = "url(../images/Icon-plus.svg)";
+        document.getElementById("Plus").style.backgroundImage = "url(./images/Icon-plus.svg)";
 
         document.getElementById("name"+movie_id).innerHTML = input_name;
         document.getElementById("director"+movie_id).innerHTML = input_director;
@@ -205,7 +205,7 @@ async function deleteMovie(movie_id){
         document.getElementById("MovieDirectorName-input").value ="";
         document.getElementById("MovieReleaseYear-input").value ="";
         document.getElementById("MovieDescription-input").value = "";
-        document.getElementById("Plus").style.backgroundImage = "url(../images/Icon-plus.svg)";
+        document.getElementById("Plus").style.backgroundImage = "url(./images/Icon-plus.svg)";
     }
     catch (err) { return; }
 }
